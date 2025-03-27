@@ -1,10 +1,13 @@
 [project]
-name = "31230"
+name = "nf-gottcha"
 description = "Nextflow runner of gottcha2 for taxonomic classification of viruses in metagenomic sequence datasets."
 authors = [{ name = "Nicholas Minor", email = "nicholasrminor@gmail.com" }]
-dependencies = ["pandas>=2.2.3"]
-requires-python = ">= 3.9"
+requires-python = ">= 3.11"
 version = "0.1.0"
+dependencies = [
+    "pandas>=2.2.3",
+    "typer>=0.15.2",
+]
 
 [build-system]
 requires = ["setuptools >= 40.8.0", "cffi >=1.15.0,!=1.17.0"]
@@ -14,15 +17,22 @@ build-backend = "setuptools.build_meta:__legacy__"
 py-modules = ["bin"]
 
 [project.scripts]
-"oneroof" = "bin.__main__:main"
+"nf-gottcha" = "bin.__main__:main"
 
+[tool.uv]
+compile-bytecode = true
+
+[tool.basedpyright]
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "basic"
 
 [tool.pixi.project]
 channels = ["conda-forge", "bioconda", "anaconda"]
 platforms = ["osx-64", "linux-64"]
 
 [tool.pixi.pypi-dependencies]
-31230 = { path = ".", editable = true }
+nf_gottcha = { path = ".", editable = true }
 
 [tool.pixi.dependencies]
 samtools = ">=1.5,<2"

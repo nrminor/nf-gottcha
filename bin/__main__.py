@@ -1,6 +1,9 @@
+from .cli import app
+
+
 def main() -> None:
-    print("Hit mom!")
+    app()
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
