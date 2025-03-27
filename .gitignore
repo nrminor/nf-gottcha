@@ -5,6 +5,7 @@
 !.gitignore
 !.gitattributes
 !README.md
+!LICENSE
 !main.nf
 !nextflow.config
 !pyproject.toml
