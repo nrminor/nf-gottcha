@@ -3,7 +3,7 @@ name = "31230"
 description = "Nextflow runner of gottcha2 for taxonomic classification of viruses in metagenomic sequence datasets."
 authors = [{ name = "Nicholas Minor", email = "nicholasrminor@gmail.com" }]
 dependencies = ["pandas>=2.2.3"]
-requires-python = ">= 3.11"
+requires-python = ">= 3.9"
 version = "0.1.0"
 
 [build-system]
@@ -18,8 +18,8 @@ py-modules = ["bin"]
 
 
 [tool.pixi.project]
-channels = ["anaconda", "conda-forge", "bioconda"]
-platforms = ["osx-64"]
+channels = ["conda-forge", "bioconda", "anaconda"]
+platforms = ["osx-64", "linux-64"]
 
 [tool.pixi.pypi-dependencies]
 31230 = { path = ".", editable = true }

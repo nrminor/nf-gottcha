@@ -12,6 +12,8 @@
 !pixi.lock
 !uv.lock
 !refman.toml
+!Dockerfile
+!justfile
 
 # bin scripts
 !bin/

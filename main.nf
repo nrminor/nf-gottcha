@@ -1,5 +1,7 @@
 #!/usr/bin/env nextflow
 
+// https://github.com/poeli/GOTTCHA2/wiki
+
 workflow {
 
     assert params.ref_mmi : "A URI to a reference database in minimap2 MMI format must be provided with --ref_mmi. \
@@ -22,7 +24,7 @@ workflow {
 
     SETUP(ch_ref_uri)
 
-    GOTTCHA(
+    GOTTCHA2(
         SETUP.out.mmi,
         ch_illumina_fastqs,
         ch_nanopore_fastqs
@@ -48,7 +50,7 @@ workflow SETUP {
 
 }
 
-workflow GOTTCHA {
+workflow GOTTCHA2 {
 
     take:
     ch_ref_mmi
@@ -57,11 +59,11 @@ workflow GOTTCHA {
 
     main:
     
-    GOTTCHA2_NANOPORE(
+    PROFILE_NANOPORE(
        ch_ref_mmi.combine(ch_fastq_files) 
     )
 
-    GOTTCHA2_ILLUMINA(
+    PROFILE_ILLUMINA(
        ch_ref_mmi.combine(ch_fastq_files) 
     )
 
@@ -82,8 +84,9 @@ workflow LABKEY {
     ch_fasta
 
     main:
+    SEND_TSV_TO_LABKEY(ch_full_tsv)
 
-    emit:
+    SEND_FASTA_TO_LABKEY(ch_fasta)
 
 }
 
@@ -97,7 +100,7 @@ process DOWNLOAD_REF_DATASET {
 
 }
 
-process GOTTCHA2_NANOPORE {
+process PROFILE_NANOPORE {
 
     tag "${sample_id}"
     publishDir params.gottcha_sam, mode: 'copy', overwrite: false, pattern: "*.sam"
@@ -122,6 +125,30 @@ process GOTTCHA2_NANOPORE {
      -t ${task.cpus} \
     -i ${fastq} \
      --nanopore
+    """
+
+}
+
+process PROFILE_ILLUMINA {
+
+    tag "${sample_id}"
+    publishDir params.gottcha_sam, mode: 'copy', overwrite: false, pattern: "*.sam"
+    publishDir params.gottcha_stats, mode: 'copy', overwrite: false, pattern: "*.tsv"
+
+    cpus params.gottcha2_cpus
+    // memory
+
+    input:
+    tuple path(ref_mmi), val(sample_id), path(fastq1, path(fastq2))
+
+    output:
+    path "${sample_id}*.sam", emit: aligned
+    path "${sample_id}*.tsv", emit: stats
+
+    script:
+    String ref_prefix = file(ref_mmi).getBaseName().toString().replace(".mmi", "")
+    """
+    gottcha2.py -d ${ref_prefix} -t ${task.cpus} -i ${fastq1} ${fastq2}
     """
 
 }
