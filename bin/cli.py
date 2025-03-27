@@ -200,7 +200,3 @@ def run(  # noqa: PLR0913
             typer.echo(f"Command failed with error:\n\n{e}")
     else:
         typer.echo("Command execution cancelled.")
-
-
-if __name__ == "__main__":
-    app()
