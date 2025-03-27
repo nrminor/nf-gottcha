@@ -1,0 +1,30 @@
+# start with an inverted gitignore
+*
+
+# project root files
+!.gitignore
+!.gitattributes
+!README.md
+!main.nf
+!nextflow.config
+!pyproject.toml
+!pixi.lock
+!uv.lock
+!refman.toml
+
+# bin scripts
+!bin/
+!bin/*.py
+!bin/*.R
+!bin/*.pl
+!bin/*.sh
+!bin/*.awk
+
+# modules, subworkflows, and workflows
+!workflows/
+!workflows/*.nf
+!subworkflows/
+!subworkflows/*.nf
+!modules/
+!modules/*.nf
+

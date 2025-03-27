@@ -1,0 +1,6 @@
+[project]
+title = "nf-gottcha2"
+description = "Nextflow runner of gottcha2 for taxonomic classification of viruses in metagenomic sequence datasets."
+last_modified = "2025-03-26T23:35:10.246239Z"
+global = false
+datasets = []

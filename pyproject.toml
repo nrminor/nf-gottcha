@@ -1,0 +1,44 @@
+[project]
+name = "31230"
+description = "Nextflow runner of gottcha2 for taxonomic classification of viruses in metagenomic sequence datasets."
+authors = [{ name = "Nicholas Minor", email = "nicholasrminor@gmail.com" }]
+dependencies = ["pandas>=2.2.3"]
+requires-python = ">= 3.11"
+version = "0.1.0"
+
+[build-system]
+requires = ["setuptools >= 40.8.0", "cffi >=1.15.0,!=1.17.0"]
+build-backend = "setuptools.build_meta:__legacy__"
+
+[tool.setuptools]
+py-modules = ["bin"]
+
+[project.scripts]
+"oneroof" = "bin.__main__:main"
+
+
+[tool.pixi.project]
+channels = ["anaconda", "conda-forge", "bioconda"]
+platforms = ["osx-64"]
+
+[tool.pixi.pypi-dependencies]
+31230 = { path = ".", editable = true }
+
+[tool.pixi.dependencies]
+samtools = ">=1.5,<2"
+minimap2 = ">=2.22,<3"
+gottcha2 = ">=2.1.8.11,<3"
+nextflow = ">=24.10.5,<25"
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.28.4",
+    "euphorie>=17.0.2",
+    "jupyter>=1.1.1",
+    "marimo[sql]>=0.11.28",
+    "polars>=1.26.0",
+    "pyarrow>=19.0.1",
+    "pytest>=8.3.5",
+    "ruff>=0.11.2",
+    "tox>=4.24.2",
+]
