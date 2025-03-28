@@ -1,10 +1,10 @@
-# 31230 nf-GOTTCHA prototype
+# nf-GOTTCHA prototype (WIP)
 
-Nextflow runner of gottcha2 for taxonomic classification of viruses in metagenomic sequence datasets.
+Nextflow runner of GOTTCHA2 for taxonomic classification of viruses in metagenomic sequence datasets.
 
 ## Overview
 
-`nf-gottcha` is built as python command-liner interface, which itself runs Nextflow as an orchestrator, which itself then runs [`GOTTCHA2`](https://github.com/poeli/GOTTCHA2) with some helper tools. These tools include a setup process that downloads a required reference MMI database, or finds it in the local file system, as well as processes that upload the final taxonomic report data into the [DHO Lab Labkey System](https://dholk.primate.wisc.edu/project/home/begin.view?).
+`nf-gottcha` is built as python command-line interface, which itself runs Nextflow as an orchestrator, which itself then runs [`GOTTCHA2`](https://github.com/poeli/GOTTCHA2) with some helper tools. These tools include a setup process that downloads a required reference MMI database, or finds it in the local file system, as well as processes that upload the final taxonomic report data into the [DHO Lab Labkey System](https://dholk.primate.wisc.edu/project/home/begin.view?).
 
 ## Usage
 
