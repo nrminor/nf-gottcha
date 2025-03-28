@@ -86,7 +86,7 @@ workflow LABKEY {
     main:
     SEND_TSV_TO_LABKEY(ch_full_tsv)
 
-    SEND_FASTA_TO_LABKEY(ch_fasta)
+    // SEND_FASTA_TO_LABKEY(ch_fasta)
 
 }
 
@@ -177,4 +177,20 @@ process GENERATE_FASTA {
     --database ${ref_mmi}
     """
     
+}
+
+process SEND_TSV_TO_LABKEY {
+
+    input:
+    path tsv
+
+    script:
+    """
+    push_tsv_to_labkey.py \
+    ${tsv} \
+    --labkey-url "https://<LABKEY-URL>.com" \ 
+    --container "<LABKEY-FOLDER-PATH>" \
+    --query-name "<QUERY-LIST-NAME>" \
+    -v
+    """
 }

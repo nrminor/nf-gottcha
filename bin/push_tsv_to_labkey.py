@@ -162,7 +162,7 @@ def main() -> None:
 
     try:
         # Attempt to load the CSV file into a Polars DataFrame.
-        full_tsv_df = pl.read_csv(args.csv_file)
+        full_tsv_df = pl.read_csv(args.csv_file, separator="\t")
     except FileNotFoundError:
         logger.error(f"CSV file not found: {args.csv_file}")
         sys.exit(f"CSV file not found: {args.csv_file}")
