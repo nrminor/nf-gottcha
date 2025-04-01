@@ -28,8 +28,7 @@ RUN cd $HOME && PIXI_ARCH=x86_64 curl -fsSL https://pixi.sh/install.sh | bash
 ENV PATH=$PATH:$HOME/.pixi/bin
 
 # 4) install everything else with pixi
-#  # && pixi clean cache --assume-yes
-RUN cd $HOME && pixi shell --frozen
+RUN cd $HOME && pixi install --frozen && pixi clean cache --assume-yes
 
 # 5) modify the shell config so that each container launches within the pixi env
 RUN echo "export PATH=$PATH:$HOME/.pixi/envs/default/bin" >> $HOME/.bashrc
@@ -37,4 +36,5 @@ RUN echo "export PATH=$PATH:$HOME/.pixi/envs/default/bin" >> $HOME/.bashrc
 # 6) modify some nextflow environment variables
 RUN echo "export NXF_CACHE_DIR=/scratch" >> $HOME/.bashrc
 RUN echo "export NXF_HOME=/scratch" >> $HOME/.bashrc
+
 

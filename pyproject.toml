@@ -42,6 +42,7 @@ gottcha2 = ">=2.1.8.11,<3"
 nextflow = ">=24.10.5,<25"
 seqkit = ">=2.10.0,<3"
 bbmap = ">=39.19,<40"
+seqfuk = "*"
 
 [dependency-groups]
 dev = [
