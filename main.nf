@@ -26,14 +26,14 @@ workflow {
 
     GOTTCHA2(
         SETUP.out.mmi,
-        ch_illumina_fastqs,
+        ch_illumina_fastqs
         ch_nanopore_fastqs
     )
 
-    LABKEY(
-        GOTTCHA.out.tsv,
-        GOTTCHA.out.fasta
-    )
+    // LABKEY(
+    //     GOTTCHA.out.tsv,
+    //     GOTTCHA.out.fasta
+    // )
 
 }
 
@@ -43,10 +43,10 @@ workflow SETUP {
     ch_ref_uri
 
     main:
-    DOWNLOAD_REF_DATASET(ch_ref_uri)
+    SETUP_REF_DATASET(ch_ref_uri)
 
     emit:
-    DOWNLOAD_REF_DATASET.out.mmi
+    SETUP_REF_DATASET.out.mmi
 
 }
 
@@ -91,12 +91,20 @@ workflow LABKEY {
 }
 
 
-process DOWNLOAD_REF_DATASET {
+process SETUP_REF_DATASET {
    
     storeDir params.ref_mmi_cache
 
+    input:
+    path mmi
+
     output:
     path mmi, emit: mmi
+
+    script:
+    """
+    validate_mmi.py ${mmi}
+    """
 
 }
 
@@ -139,7 +147,7 @@ process PROFILE_ILLUMINA {
     // memory
 
     input:
-    tuple path(ref_mmi), val(sample_id), path(fastq1, path(fastq2))
+    tuple path(ref_mmi), val(sample_id), path(fastq1, path(fastq2)
 
     output:
     path "${sample_id}*.sam", emit: aligned
