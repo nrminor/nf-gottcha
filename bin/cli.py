@@ -45,9 +45,9 @@ def check_path(value: str, arg_name: str) -> None:
     """
     if value and not (value.startswith("${") or "params" in value):
         p = Path(value)
-        assert p.exists(), (
-            f"Error: The provided {arg_name} path '{value}' does not exist. Please provide a valid file or directory."
-        )
+        assert (
+            p.exists()
+        ), f"Error: The provided {arg_name} path '{value}' does not exist. Please provide a valid file or directory."
 
 
 @app.command()
@@ -164,9 +164,9 @@ def run(  # noqa: PLR0913
 
     You can review the generated command and confirm whether to execute it.
     """  # Ensure that at least one of illumina_fastq_dir and nanopore_fastq_dir is provided.
-    assert illumina_fastq_dir or nanopore_fastq_dir, (
-        "Error: At least one of --illumina_fastq_dir or --nanopore_fastq_dir must be provided."
-    )
+    assert (
+        illumina_fastq_dir or nanopore_fastq_dir
+    ), "Error: At least one of --illumina_fastq_dir or --nanopore_fastq_dir must be provided."
 
     # Check each provided path.
     for arg_name, value in [
@@ -174,14 +174,6 @@ def run(  # noqa: PLR0913
         ("params_file", params_file),
         ("illumina_fastq_dir", illumina_fastq_dir),
         ("nanopore_fastq_dir", nanopore_fastq_dir),
-        ("ref_mmi", ref_mmi),
-        ("ref_mmi_cache", ref_mmi_cache),
-        ("results", results),
-        ("setup_results", setup_results),
-        ("gottcha_results", gottcha_results),
-        ("gottcha_sam", gottcha_sam),
-        ("gottcha_stats", gottcha_stats),
-        ("gottcha_fasta", gottcha_fasta),
     ]:
         if not value:
             continue
@@ -224,7 +216,7 @@ def run(  # noqa: PLR0913
     typer.echo(command)
     if typer.confirm("\nDo you want to execute this command?"):
         try:
-            parsed_command = command.split(" ")
+            parsed_command = f"{command} -resume".split(" ")
             subprocess.run(parsed_command, shell=False, check=True)  # noqa: S603
         except subprocess.CalledProcessError as e:
             typer.echo(f"Command failed with error:\n\n{e}")
