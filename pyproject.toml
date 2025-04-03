@@ -30,7 +30,7 @@ typeCheckingMode = "basic"
 
 [tool.pixi.project]
 channels = ["conda-forge", "bioconda", "anaconda"]
-platforms = ["osx-64", "linux-64"]
+platforms = ["osx-64", "linux-64", "linux-aarch64"]
 
 [tool.pixi.pypi-dependencies]
 nf_gottcha = { path = ".", editable = true }
@@ -42,7 +42,12 @@ gottcha2 = ">=2.1.8.11,<3"
 nextflow = ">=24.10.5,<25"
 seqkit = ">=2.10.0,<3"
 bbmap = ">=39.19,<40"
-seqfuk = "*"
+
+[tool.pixi.target.linux-64.dependencies]
+apptainer = ">=1.3.6,<2"
+
+[tool.pixi.target.linux-aarch64.dependencies]
+apptainer = ">=1.3.6,<2"
 
 [dependency-groups]
 dev = [
