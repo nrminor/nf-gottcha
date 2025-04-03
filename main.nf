@@ -13,6 +13,8 @@ workflow {
         : Channel.empty()
 
     ch_ref_files = Channel.fromPath("${params.ref_mmi}*")
+        .collect(sort: true)
+        .map { mmi, stats, tsv -> tuple( file(mmi), file(stats), file(tsv) ) }
 
 
     // SETUP(ch_ref_files)
@@ -99,7 +101,7 @@ process PROFILE_NANOPORE {
     cpus params.gottcha2_cpus
 
     input:
-    tuple path(ref_mmi), val(sample_id), path(fastq)
+    tuple path(ref_mmi), path(stats), path(tsv), val(sample_id), path(fastq)
 
     output:
     path "${sample_id}*.sam", emit: aligned
@@ -128,7 +130,7 @@ process PROFILE_ILLUMINA {
     cpus params.gottcha2_cpus
 
     input:
-    tuple path(ref_mmi), val(sample_id), path(fastq1), path(fastq2)
+    tuple path(ref_mmi), path(stats), path(tsv), val(sample_id), path(fastq1), path(fastq2)
 
     output:
     path "${sample_id}*.sam", emit: aligned
