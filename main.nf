@@ -46,7 +46,7 @@ workflow SETUP {
     SETUP_REF_DATASET(ch_ref_uri)
 
     emit:
-    SETUP_REF_DATASET.out.mmi
+    mmi = SETUP_REF_DATASET.out.mmi
 
 }
 
