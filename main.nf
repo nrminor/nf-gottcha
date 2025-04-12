@@ -58,7 +58,8 @@ workflow GOTTCHA2 {
     )
 
     emit:
-    tsv   = PROFILE_NANOPORE.out.stats.filter { file -> file(file).getBaseName().endsWith("full.tsv") }
+    all_stats   = PROFILE_NANOPORE.out.all_stats
+    full_tsv    = PROFILE_NANOPORE.out.full_tsv
     fasta = GENERATE_FASTA.out
 }
 
@@ -76,7 +77,7 @@ process SETUP_REF_DATASET {
 
     storeDir params.ref_mmi_cache
 
-    errorStrategy 'ignore'
+    errorStrategy { task.attempt < 3 ? 'retry' : 'ignore' }
 
     input:
     path mmi
@@ -96,7 +97,7 @@ process PROFILE_NANOPORE {
     publishDir params.gottcha_sam, mode: 'copy', overwrite: false, pattern: "*.sam"
     publishDir params.gottcha_stats, mode: 'copy', overwrite: false, pattern: "*.tsv"
 
-    errorStrategy 'ignore'
+    errorStrategy { task.attempt < 3 ? 'retry' : 'ignore' }
 
     cpus params.gottcha2_cpus
 
@@ -104,8 +105,9 @@ process PROFILE_NANOPORE {
     tuple path(ref_mmi), path(stats), path(tsv), val(sample_id), path(fastq)
 
     output:
-    path "${sample_id}*.sam", emit: aligned
-    path "${sample_id}*.tsv", emit: stats
+    tuple path(ref_mmi), path(stats), path(tsv), val(sample_id), path("${sample_id}*.sam"), emit: aligned
+    tuple path(ref_mmi), path(stats), path(tsv), val(sample_id), path("${sample_id}*.full.tsv"), emit: full_tsv
+    path "*.tsv", emit: all_stats
 
     script:
     def String ref_prefix = file(ref_mmi).getBaseName().toString().replace(".mmi", "")
@@ -125,7 +127,7 @@ process PROFILE_ILLUMINA {
     publishDir params.gottcha_sam, mode: 'copy', overwrite: false, pattern: "*.sam"
     publishDir params.gottcha_stats, mode: 'copy', overwrite: false, pattern: "*.tsv"
 
-    errorStrategy 'ignore'
+    errorStrategy { task.attempt < 3 ? 'retry' : 'ignore' }
 
     cpus params.gottcha2_cpus
 
@@ -133,8 +135,9 @@ process PROFILE_ILLUMINA {
     tuple path(ref_mmi), path(stats), path(tsv), val(sample_id), path(fastq1), path(fastq2)
 
     output:
-    path "${sample_id}*.sam", emit: aligned
-    path "${sample_id}*.tsv", emit: stats
+    tuple path(ref_mmi), path(stats), path(tsv), val(sample_id), path("${sample_id}*.sam"), emit: aligned
+    tuple path(ref_mmi), path(stats), path(tsv), val(sample_id), path("${sample_id}*.full.tsv"), emit: full_tsv
+    path "*.tsv", emit: all_stats
 
     script:
     def String ref_prefix = file(ref_mmi).getBaseName().toString().replace(".mmi", "")
@@ -148,12 +151,13 @@ process GENERATE_FASTA {
     tag "${sample_id}"
     publishDir params.gottcha_fasta, mode: 'copy', overwrite: false, pattern: "*.fasta"
 
-    errorStrategy 'ignore'
+    errorStrategy { task.attempt < 3 ? 'retry' : 'ignore' }
 
     cpus params.gottcha2_cpus
 
     input:
-    tuple path(ref_mmi), val(sample_id), path(sam_files)
+    tuple path(ref_mmi), path(stats), path(tsv), val(sample_id), path("*extract*"), emit: extracted_reads
+    path "*.*", emit: all_files
 
     output:
     path "*.fasta"
@@ -186,3 +190,4 @@ process SEND_TSV_TO_LABKEY {
     -v
     """
 }
+
